@@ -1,8 +1,8 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/hpcdockbench/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/ablab/hpcdockbench/master/nextflow_schema.json",
     "title": "ablab/hpcdockbench pipeline parameters",
-    "description": "Docking benchmark that employs PoseBuster set to test software",
+    "description": "A bioinformatics pipeline to perform docking benchmark on Astex and PoseBusters data sets.",
     "type": "object",
     "$defs": {
         "input_output_options": {
@@ -10,8 +10,19 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["outdir"],
+            "required": ["input", "outdir"],
             "properties": {
+                "input": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "schema": "assets/schema_input.json",
+                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.csv$",
+                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
+                    "fa_icon": "fas fa-file-csv"
+                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
@@ -25,88 +36,49 @@
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
                 },
-                "workDir": {
-                    "default": "work",
+                "multiqc_title": {
+                    "type": "string",
+                    "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
+                    "fa_icon": "fas fa-file-signature"
+                }
+            }
+        },
+        "reference_genome_options": {
+            "title": "Reference genome options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "Reference genome related files and options required for the workflow.",
+            "properties": {
+                "genome": {
+                    "type": "string",
+                    "description": "Name of iGenomes reference.",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
+                },
+                "fasta": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "description": "Path to FASTA genome file.",
+                    "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
+                    "fa_icon": "far fa-file-code"
+                },
+                "igenomes_ignore": {
+                    "type": "boolean",
+                    "description": "Do not load the iGenomes reference config.",
+                    "fa_icon": "fas fa-ban",
+                    "hidden": true,
+                    "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "igenomes_base": {
                     "type": "string",
                     "format": "directory-path",
-                    "description": "The working directory of the nextflow pipeline. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
-                },
-                "singularity_local_cpu_container": {
-                    "type": "string",
-                    "description": "Using Singularity SIF file from the local storage",
-                    "format": "file-path",
-                    "exists": true,
-                    "pattern": "^\\S+\\.sif$",
-                    "errorMessage": "Singularity CPU Container path"
-                },
-                "singularity_local_gpu_container": {
-                    "type": "string",
-                    "description": "Using Singularity SIF file from the local storage for GPU calculations",
-                    "format": "file-path",
-                    "exists": true,
-                    "pattern": "^\\S+\\.sif$",
-                    "errorMessage": "Singularity GPU Container path "
-                },
-                "icm_home": {
-                    "type": "string",
-                    "description": "ICM home directory",
-                    "format": "directory",
-                    "exists": true,
-                    "pattern": "^\\S+(/)?$",
-                    "errorMessage": "ICM installation folder missing"
-                },
-                "mount_options": {
-                    "type": "string",
-                    "description": "Mount options",
-                    "errorMessage": "Mount options, especially useful for containers"
-                },
-                "save_intermediate": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Save intermediate results or not. Default: false",
-                    "hidden": false
-                },
-                "smart_container": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Determine automatically which container to use. Default: true",
-                    "hidden": false
-                },
-                "container_gpu_link": {
-                    "type": "string",
-                    "default": "docker.io/hgrabski/hpc_dock_bench:gpu-22.04",
-                    "description": "Container image to use for GPU usage",
-                    "errorMessage": "Could not retrieve image from DockerHub to use for the pipeline"
-                },
-                "container_cpu_link": {
-                    "type": "string",
-                    "default": "docker.io/hgrabski/hpc_dock_bench:cpu-22.04",
-                    "description": "Container image to use for CPU usage",
-                    "errorMessage": "Could not retrieve image from DockerHub to use for the pipeline"
-                },
-                "benchmark_dataset": {
-                    "type": "string",
-                    "default": "https://zenodo.org/records/8278563/files/posebusters_paper_data.zip",
-                    "description": "PoseBusters benchmark dataset link",
-                    "errorMessage": "Could not download the PB dataset"
-                },
-                "benchmark_pb_correction": {
-                    "type": "string",
-                    "default": "https://github.com/maabuu/posebusters/files/14516485/posebusters_pdb_ccd_ids.txt",
-                    "description": "PoseBusters benchmark dataset corrected list",
-                    "errorMessage": "Could not download the PB dataset correction file"
-                },
-                "input": {
-                    "type": "string",
-                    "default": null,
-                    "description": "nf-core lint requires but for this pipeline there is no need",
-                    "errorMessage": "dummy value"
-                },
-                "project": {
-                    "type": "string",
-                    "description": "Project name on SLURM based HPC cluster",
-                    "default": null
+                    "description": "The base path to the igenomes reference files",
+                    "fa_icon": "fas fa-ban",
+                    "hidden": true,
+                    "default": "s3://ngi-igenomes/igenomes/"
                 }
             }
         },
@@ -194,6 +166,14 @@
                     "fa_icon": "fas fa-remove-format",
                     "hidden": true
                 },
+                "max_multiqc_email_size": {
+                    "type": "string",
+                    "description": "File size limit when attaching MultiQC reports to summary emails.",
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+                    "default": "25.MB",
+                    "fa_icon": "fas fa-file-upload",
+                    "hidden": true
+                },
                 "monochrome_logs": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
@@ -206,6 +186,24 @@
                     "fa_icon": "fas fa-people-group",
                     "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
+                },
+                "multiqc_config": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Custom config file to supply to MultiQC.",
+                    "fa_icon": "fas fa-cog",
+                    "hidden": true
+                },
+                "multiqc_logo": {
+                    "type": "string",
+                    "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
+                    "fa_icon": "fas fa-image",
+                    "hidden": true
+                },
+                "multiqc_methods_description": {
+                    "type": "string",
+                    "description": "Custom MultiQC yaml file containing HTML including a methods description.",
+                    "fa_icon": "fas fa-cog"
                 },
                 "validate_params": {
                     "type": "boolean",
@@ -238,42 +236,6 @@
                 "show_hidden": {
                     "type": "boolean",
                     "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
-                },
-                "useGPU": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Use NVIDIA GPUs for calculation",
-                    "hidden": false
-                },
-                "singularity_pull_docker_container": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Pull Singularity container from Docker or not",
-                    "hidden": false
-                },
-                "singularity_use_local_file": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Use SIF image from the file storage",
-                    "hidden": false
-                },
-                "effort": {
-                    "type": "number",
-                    "description": "ICM effort to perform docking. Default: 4.0",
-                    "default": 5.0,
-                    "hidden": false
-                },
-                "conformations": {
-                    "type": "integer",
-                    "description": "Number of conformations to generate. Default: 10",
-                    "default": 10,
-                    "hidden": false
-                },
-                "random_seed": {
-                    "type": "integer",
-                    "description": "Number for the random seed. Default: 25051990",
-                    "default": 20452501,
-                    "hidden": false
                 }
             }
         }
@@ -281,6 +243,9 @@
     "allOf": [
         {
             "$ref": "#/$defs/input_output_options"
+        },
+        {
+            "$ref": "#/$defs/reference_genome_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

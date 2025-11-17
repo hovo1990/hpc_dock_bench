@@ -137,8 +137,8 @@ workflow HPCDOCKBENCH {
     // tasks_todo_debug.view()
 
     // // -- ? DEBUG ON
-    // tasks_todo_debug_rborn = tasks_todo_debug_rborn.take(5)
-    // tasks_todo_debug_regular = tasks_todo_debug_regular.take(5)
+    tasks_todo_debug_rborn = tasks_todo_debug_rborn.take(5)
+    tasks_todo_debug_regular = tasks_todo_debug_regular.take(5)
 
 
 
@@ -201,10 +201,10 @@ workflow HPCDOCKBENCH {
 
 
         // tasks_todo_ging_sorted.view()
-        // -- ! Debug purpose
-        // tasks_todo_ging = tasks_todo_ging_sorted.take(20)
+        // -- ! DEBUG ON
+        tasks_todo_ging = tasks_todo_ging_sorted.take(5)
 
-        tasks_todo_ging = tasks_todo_ging_sorted
+        // tasks_todo_ging = tasks_todo_ging_sorted
         // tasks_todo_ging.view()
 
 
@@ -282,7 +282,7 @@ workflow HPCDOCKBENCH {
 
 
     // // // // -- * SStage 6: make plot test
-    plots = makePlot( collectedData)
+    // plots = makePlot( collectedData)
 
 
 

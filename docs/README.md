@@ -1,4 +1,4 @@
-# nf-core/hpcdockbench: Documentation
+# ablab/hpcdockbench: Documentation
 
 The nf-core/hpcdockbench documentation is split into the following pages:
 

@@ -75,12 +75,14 @@ nextflow run main.nf \
 export ICM_HOME=~/soft/icm/icms
 export NFX_OPTS="-Xms=512m -Xmx=4g"
 export NXF_GLIBC_VERSION=$(ldd --version | head -n1 | awk '{print $NF}')
+export HOOK_URL="https://discord.com/api/webhooks/XXXXXX/XXXXXXXX/slack"
 
 nextflow run main.nf \
    -resume \
    -profile singularity \
    --outdir ~/hpc_dock_bench_singularity_test11 \
-   --icm_home $ICM_HOME
+   --icm_home $ICM_HOME \
+   --hook_url $HOOK_URL
 
 
 ```

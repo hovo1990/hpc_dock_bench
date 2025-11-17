@@ -53,18 +53,12 @@ Now, you can run the pipeline using:
 
 <!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
-```bash
-nextflow run nf-core/hpcdockbench \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
-   --outdir <OUTDIR>
-```
-
 
 ## How to run using docker profile
 ```bash
 export ICM_HOME=~/soft/icm/icms
 export NFX_OPTS="-Xms=512m -Xmx=4g"
+export NXF_GLIBC_VERSION=$(ldd --version | head -n1 | awk '{print $NF}')
 
 nextflow run main.nf \
    -resume \
@@ -80,12 +74,12 @@ nextflow run main.nf \
 ```bash
 export ICM_HOME=~/soft/icm/icms
 export NFX_OPTS="-Xms=512m -Xmx=4g"
-
+export NXF_GLIBC_VERSION=$(ldd --version | head -n1 | awk '{print $NF}')
 
 nextflow run main.nf \
    -resume \
    -profile singularity \
-   --outdir ~/hpc_dock_bench_singularity \
+   --outdir ~/hpc_dock_bench_singularity_test11 \
    --icm_home $ICM_HOME
 
 
@@ -95,12 +89,12 @@ nextflow run main.nf \
 ```bash
 export ICM_HOME=~/soft/icm/icms
 export NFX_OPTS="-Xms=512m -Xmx=4g"
-
+export NXF_GLIBC_VERSION=$(ldd --version | head -n1 | awk '{print $NF}')
 
 nextflow run main.nf \
    -resume \
    -profile singularity \
-   --outdir ~/hpc_dock_bench_singularity_test \
+   --outdir ~/hpc_dock_bench_singularity \
    --save_intermediate true \
    --icm_home $ICM_HOME
 
@@ -114,7 +108,7 @@ nextflow run main.nf \
 export ICM_HOME=/pro/icm/icms
 export NFX_OPTS="-Xms=512m -Xmx=4g"
 export SINGULARITY_CACHEDIR="/scratch/$USER/hpc_dock_bench"
-
+export NXF_GLIBC_VERSION=$(ldd --version | head -n1 | awk '{print $NF}')
 
 nextflow run main.nf \
    -resume \

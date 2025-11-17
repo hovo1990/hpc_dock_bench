@@ -12,7 +12,7 @@
 
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_dockbench_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_hpcdockbench_pipeline'
 
 
 // -- * Custom modules

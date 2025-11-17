@@ -18,7 +18,7 @@
 include { HPCDOCKBENCH  } from './workflows/hpcdockbench'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_hpcdockbench_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_hpcdockbench_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_hpcdockbench_pipeline'
+// include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_hpcdockbench_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,7 +73,6 @@ workflow {
         params.monochrome_logs,
         args,
         params.outdir,
-        params.input,
         params.help,
         params.help_full,
         params.show_hidden

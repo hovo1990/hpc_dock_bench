@@ -194,7 +194,7 @@
                     "fa_icon": "fas fa-remove-format",
                     "hidden": true
                 },
-                "monochrome_logs": {
+                "monochrome_log": {
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
                     "fa_icon": "fas fa-palette",

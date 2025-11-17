@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the nf-core/hpcdockbench pipeline
+// Subworkflow with functionality specific to the ablab/hpcdockbench pipeline
 //
 
 /*
@@ -32,11 +32,10 @@ workflow PIPELINE_INITIALISATION {
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
+    input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
     show_hidden       // boolean: Show hidden parameters in the help message
-
-
 
     main:
 
@@ -81,33 +80,32 @@ workflow PIPELINE_INITIALISATION {
     //
     validateInputParameters()
 
-
     //
     // Create channel from input file provided through params.input
     //
 
-    // Channel
-    //     .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-    //     // .map {
-    //     //     id, smiles, name ->
-    //     //         if (!name) {
-    //     //             return [ id, smiles ]
-    //     //         } else {
-    //     //             return [ id, smiles, name ]
-    //     //         }
-    //     // }
-    //     // .groupTuple()
-    //     .map { samplesheet ->
-    //         validateInputSamplesheet(samplesheet)
-    //     }
-    //     // .map {
-    //     //     id, smiles, name ->
-    //     //         return [ id, smiles, name]
-    //     // }
-    //     .set { ch_samplesheet }
+    Channel
+        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+        .map {
+            meta, fastq_1, fastq_2 ->
+                if (!fastq_2) {
+                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
+                } else {
+                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+                }
+        }
+        .groupTuple()
+        .map { samplesheet ->
+            validateInputSamplesheet(samplesheet)
+        }
+        .map {
+            meta, fastqs ->
+                return [ meta, fastqs.flatten() ]
+        }
+        .set { ch_samplesheet }
 
     emit:
-    // samplesheet = ch_samplesheet
+    samplesheet = ch_samplesheet
     versions    = ch_versions
 }
 
@@ -126,9 +124,11 @@ workflow PIPELINE_COMPLETION {
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
     hook_url        //  string: hook URL for notifications
+    multiqc_report  //  string: Path to MultiQC report
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    def multiqc_reports = multiqc_report.toList()
 
     //
     // Completion email and summary
@@ -142,7 +142,7 @@ workflow PIPELINE_COMPLETION {
                 plaintext_email,
                 outdir,
                 monochrome_logs,
-                []
+                multiqc_reports.getVal(),
             )
         }
 
@@ -162,37 +162,16 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-
-
-
 //
 // Check and validate pipeline parameters
 //
 def validateInputParameters() {
-    benchmarkExistsError()
+    genomeExistsError()
 }
-
-
-
-//
-// Exit pipeline if incorrect --genome key provided
-//
-def benchmarkExistsError() {
-    if (params.icm_home) {
-        def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "  ICM_HOME '${params.icm_home}' not found in any config files provided to the pipeline.\n" +
-            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-        error(error_string)
-    }
-}
-
 
 //
 // Validate channels from input samplesheet
 //
-
-
 def validateInputSamplesheet(input) {
     def (metas, fastqs) = input[1..2]
 
@@ -205,6 +184,31 @@ def validateInputSamplesheet(input) {
     return [ metas[0], fastqs ]
 }
 //
+// Get attribute from genome config file e.g. fasta
+//
+def getGenomeAttribute(attribute) {
+    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
+        if (params.genomes[ params.genome ].containsKey(attribute)) {
+            return params.genomes[ params.genome ][ attribute ]
+        }
+    }
+    return null
+}
+
+//
+// Exit pipeline if incorrect --genome key provided
+//
+def genomeExistsError() {
+    if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
+        def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "  Genome '${params.genome}' not found in any config files provided to the pipeline.\n" +
+            "  Currently, the available genome keys are:\n" +
+            "  ${params.genomes.keySet().join(", ")}\n" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        error(error_string)
+    }
+}
+//
 // Generate methods description for MultiQC
 //
 def toolCitationText() {
@@ -213,6 +217,8 @@ def toolCitationText() {
     // Uncomment function in methodsDescriptionText to render in MultiQC report
     def citation_text = [
             "Tools used in the workflow included:",
+            "FastQC (Andrews 2010),",
+            "MultiQC (Ewels et al. 2016)",
             "."
         ].join(' ').trim()
 
@@ -224,6 +230,8 @@ def toolBibliographyText() {
     // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "<li>Author (2023) Pub name, Journal, DOI</li>" : "",
     // Uncomment function in methodsDescriptionText to render in MultiQC report
     def reference_text = [
+            "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).</li>",
+            "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics , 32(19), 3047–3048. doi: /10.1093/bioinformatics/btw354</li>"
         ].join(' ').trim()
 
     return reference_text
@@ -265,4 +273,3 @@ def methodsDescriptionText(mqc_methods_yaml) {
 
     return description_html.toString()
 }
-

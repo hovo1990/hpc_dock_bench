@@ -23,10 +23,10 @@ process exportSDF{
         // containerOptions " --nv"
     }
     else if (workflow.containerEngine == 'singularity' ){
-        container "${params.container_link}"
+        container "${params.container_cpu_link}"
     }
     else {
-        container "${params.container_link}"
+        container "${params.container_cpu_link}"
         // containerOptions " --gpus all"
     }
 
@@ -67,7 +67,7 @@ process exportSDF{
         echo "Export docking poses as sdf file  v${i_version}"
 
         #ls -l .
-        ${params.icm_exec ?: "${params.icm_home}/icm64"} \
+        ${params.icm_home}/icm64 \
         ${projectDir}/bin/export_sdf.icm \
                 -p=${proj_id} \
                 -i=${icb_file}

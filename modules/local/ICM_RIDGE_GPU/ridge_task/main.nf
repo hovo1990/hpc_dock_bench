@@ -35,11 +35,11 @@ process ridgeTask_GPU {
         containerOptions " --nv"
     }
     else if (workflow.containerEngine == 'singularity' ){
-        container "${params.container_link}"
+        container "${params.container_gpu_link}"
         containerOptions " --nv"
     }
     else {
-        container "${params.container_link}"
+        container "${params.container_gpu_link}"
         containerOptions " --gpus all"
     }
 
@@ -89,7 +89,7 @@ process ridgeTask_GPU {
         def r_scoreCutoff = params.scoreCutoff  ?: 1040282346638528859811704183484516925440
         def r_mnhits = params.mnhits  ?: 20000
         """
-        ${params.icm_exec ?: "${params.icm_home}/icm64"} \
+        ${params.icm_home}/icm64 \
         ${projectDir}/bin/_ridge_custom  \
                 ${proj_id}  \
                 input=${conformer_file} \

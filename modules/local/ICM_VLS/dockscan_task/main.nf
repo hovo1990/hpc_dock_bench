@@ -30,10 +30,10 @@ process dockScanTask {
         // containerOptions " --nv"
     }
     else if (workflow.containerEngine == 'singularity' ){
-        container "${params.container_link}"
+        container "${params.container_cpu_link}"
     }
     else {
-        container "${params.container_link}"
+        container "${params.container_cpu_link}"
         // containerOptions " --gpus all"
     }
 
@@ -61,7 +61,7 @@ process dockScanTask {
             path: { "${params.outdir}/" },
             mode: params.publish_dir_mode,
             saveAs: { filename ->
-            filename.equals('versions.yml') ? null : "${params.outdir}/ICM-VLS/stage1_dockScan/${dataset_name}/${proj_id}/${filename}" }
+            filename.equals('versions.yml') ? null : "${params.outdir}/${method}/stage1_dockScan/${dataset_name}/${proj_id}/${filename}" }
         ]
     }
 
@@ -88,7 +88,7 @@ process dockScanTask {
         #-- * this works
         # ls -l .
 
-        ${params.icm_exec ?: "${params.icm_home}/icm64"} ${params.script ?: "${params.icm_home}/_dockScan" } \
+        ${params.icm_home}/icm64 ${params.icm_home}/_dockScan  \
                 proc=${i_cpus} \
                 -s  -a  -S \
                 confs=${i_confs} \

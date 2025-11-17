@@ -71,7 +71,7 @@ module load java
 
 ```
 cd ~
-git clone https://github.com/hovo1990/nf-core-hpcdockbench.git
+git clone https://github.com/hovo1990/hpc_dock_bench.git
 ```
 
 

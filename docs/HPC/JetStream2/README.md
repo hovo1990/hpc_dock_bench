@@ -102,7 +102,7 @@ tmux new-session -s hpcdockbench
 
 ```bash
 cd ~
-git clone https://github.com/hovo1990/nf-core-hpcdockbench.git
+git clone https://github.com/hovo1990/hpc_dock_bench.git
 ```
 
 ### 6.2.1 Export nf-core-hpcdockbench to environment path and workflow

@@ -100,3 +100,7 @@ To submit the job in batch mode instead of interactive mode:
 ```bash
 sbatch aznavour.sb
 ```
+
+## 4.3 Citation
+
+Mirzoyan, A., Sahakyan, V., Shoukourian, Y. et al. Armenian National Supercomputing Center: Bridging Science and Technology through High-Performance Computing. Phys. Part. Nuclei 56, 1291–1298 (2025). https://doi.org/10.1134/S1063779625700388

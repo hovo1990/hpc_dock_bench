@@ -13,7 +13,7 @@
 
 ## Introduction
 
-**ablab/hpcdockbench** is a bioinformatics pipeline that ...
+**ablab/hpcdockbench** is a bioinformatics pipeline that that performs docking benchmark on the Astex and PoseBusters data sets.
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
@@ -23,7 +23,8 @@
 
 <!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+
+
 
 ## Usage
 

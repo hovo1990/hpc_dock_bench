@@ -1,0 +1,125 @@
+#!/pro/icm/icms/icm64 -s
+HELP = """
+  Usage> $P -i=<.icb>  -o=<outputfile.icb>
+   This prepares a docking project compatible with icm
+"""
+
+
+if (Getarg(help)) quit HELP
+l_commands = Getarg("-v",no,delete)
+
+
+
+input_csv_arg = Getarg("-i","UNDEFINED",delete)
+s_output_file = Getarg("-o","UNDEFINED",delete)
+s_output_binary_file = Getarg("-ob","UNDEFINED",delete)
+
+n_proc = Getarg("-nproc",4,delete)
+
+# check if file exists
+if(!Exist(input_csv_arg read)) quit " Error_$P: file '" input_protein_arg "' not found or not readable."
+
+
+
+read library
+call _macro
+call _startup
+# call _dockScan
+
+
+# quit 1
+# exit
+
+read table separator="," input_csv_arg  name="mainT"
+
+# -- * Rename columns
+rename mainT.A "Project"
+rename mainT.B "Dataset"
+rename mainT.C "Code"
+rename mainT.D "Structure"
+rename mainT.E "Ligand"
+rename mainT.F "Ligand_ICM_2D"
+
+
+# -- * Read molecules from Ligand and Ligand_ICM_2D
+for i=1,Nof(mainT) then
+    print " Info> working on ", String(i)
+    lig_sdf = mainT.Ligand [i]
+    lig_2d_sdf = mainT.Ligand_ICM_2D [i]
+
+    read table mol lig_sdf  name="temp_lig"
+    read table mol lig_2d_sdf  name="temp_2d_lig"
+
+    temp_back = temp_lig
+    temp_2d_back = temp_2d_lig
+    delete temp_2d_back.name
+    delete temp_2d_back.comment
+    delete temp_2d_back.sel
+
+    add temp_back temp_2d_back
+
+    # to rotate by common substructure so it will be easier to see what is going on
+    find sstructure temp_back.mol
+
+
+
+    # T_common.mol[1]
+    common_mol = T_common.mol[1]
+
+
+    # add column temp_lig temp_2d_lig.mol  name='lig_2D'
+    # add column temp_lig temp_2d_lig.sel  name='lig_sel_name'
+    add column temp_2d_lig  Chemical(Smiles(temp_lig.mol))  name='lig_original'
+
+    # -- * now works
+    select chemical temp_2d_lig.mol common_mol rotate
+    select chemical temp_2d_lig.lig_original common_mol rotate
+
+    # -- * Add ligand pdb page
+    toSel = temp_2d_lig.name
+    pdbObj = Split(toSel[1] , '_')[1]
+    ligObj = Split(toSel[1] , '_')[2]
+    add column temp_2d_lig  pdbObj name='PDB_ID'
+    add column temp_2d_lig  ligObj name='LIG_ID'
+    set format temp_2d_lig.PDB_ID "<a href=https://www.rcsb.org/structure/%1>  %1\n</a>" name="" color=''  comment = "Open PDB bank page of the structure"
+    set format temp_2d_lig.LIG_ID "<a href=https://www.rcsb.org/ligand/%1>  %1\n</a>" name="" color=''  comment = "Open PDB bank page of the ligand"
+
+    # -- * Add data from original data table
+    add column temp_2d_lig mainT.Dataset[i] name='Dataset'
+    add column temp_2d_lig mainT.Project[i] name='Project'
+    move temp_2d_lig.lig_original 2
+    move temp_2d_lig.PDB_ID 3
+    move temp_2d_lig.LIG_ID 4
+    move temp_2d_lig.Dataset 5
+    move temp_2d_lig.Project 6
+
+    if i==1 then
+      rename temp_2d_lig Name(Name("mainTab" simple),unique)
+    else
+      add mainTab temp_2d_lig
+    endif
+
+
+    # -- * cleanc
+    delete toSel pdbObj ligObj common_mol temp_back temp_2d_back temp_lig temp_2d_lig temp_lig T_common
+    print " ---------------------- "
+endfor
+
+# -- * Save as sdf file
+write table mol append mainTab s_output_file
+
+
+# -- * Also save as icb
+write binary mainTab s_output_binary_file
+
+
+
+if (Error()) then
+  printf error " Error> Could not prepare for docking\n"
+  quit 1
+endif
+
+print " Info> System for docking has been prepared\n"
+quit 0
+
+

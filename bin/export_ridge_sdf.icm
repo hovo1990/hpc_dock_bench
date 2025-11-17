@@ -1,0 +1,108 @@
+#!/pro/icm/icms/icm64 -s
+HELP = """
+  Usage> $P -pf=<path> -pn=<proj_name> -ob=<.ob> -o=<outputfile.icb>
+    Take histlist and export to sdf
+"""
+
+if (Getarg(help)) quit HELP
+l_commands = Getarg("-v",no,delete)
+
+
+
+s_project_name = Getarg("-p","UNDEFINED",delete)
+s_sdf_session = Getarg("-i","UNDEFINED",delete)
+
+n_proc = Getarg("-nproc",4,delete)
+
+#-- ? very important arguments
+r_molweight_control =   Getarg("-molweight",520,delete)
+r_coefficient = Getarg("-coeff",0.1,delete)
+
+
+
+
+#-- ! mo need for that output will be in docking prokect folder
+#output_to_save_arg = Getarg("-o","UNDEFINED",delete)
+
+# check if file exists
+if(!Exist(s_sdf_session read)) quit " Error_$P: file '" s_sdf_session"' not found or not readable."
+
+
+
+# -- * start debug part
+# quit 1
+# exit
+
+
+#-- ? End of argument section
+call _startup
+call _macro
+
+if (Error()) then
+  printf error " Error> could not load necessary module\n"
+  quit 1
+endif
+
+
+# #-- * this can be buggy need to fix this
+# call s_icmhome + "_startup"
+
+# exit
+
+read table mol s_sdf_session name='ridgeTable'
+
+if Nof(ridgeTable) <1 then
+  printf error " Error> table is empty\n"
+  quit 1
+endif
+
+
+
+#  -- * Convert table to stck
+# parrayToMol ridgeTable.mol [ 1 ] "stack"
+
+
+i_numStack  = Nof(a_1. conf)
+
+
+
+split ridgeTable.mol name="T_docked_conf"
+
+
+
+for i=1,Nof(T_docked_conf)
+  print " i is ", String(i)
+  tempT = T_docked_conf[i]
+
+  add column tempT String(i) name='Rank'
+  toExport = s_project_name + "_ridge_rank_" + String(i) + '.sdf'
+  chemSdfExport "tempT"  toExport "compress" no
+  delete tempT
+endfor
+
+
+
+if (Error()) then
+  printf error " Error> Problems while exporting to sdf\n"
+  quit 1
+endif
+
+
+
+
+
+#-- * Do successful exit
+quit 0
+
+
+
+# icm/v1> load conf a_v1. 2
+# icm/v1> extractLigand a_v1. "3D" no "" no
+# icm/v1> dsChemLock_new "chem" "chem" 1 yes
+# icm/v1_1> dsChemLock_new "chem" "chem" 1 yes
+
+  # load conf a_1. i
+
+  # extractLigand a_v1. "3D" no "" no
+
+  # tempT = mainTable [i]

@@ -2,7 +2,7 @@
 # -- * Stage 2: Main
 FROM ubuntu:18.04
 LABEL authors="Hovakim Grabski" \
-        description="Docker image containing all software requirements for the nf-core/hpc_dock_bench pipeline GPU ICM-RIDGE"
+        description="Docker image containing all software requirements for the ablab/hpc_dock_bench pipeline GPU ICM-RIDGE"
 
 
 # Set up environment variables

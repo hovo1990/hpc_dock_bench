@@ -81,7 +81,7 @@ git clone https://github.com/hovo1990/hpc_dock_bench.git
 
 
 ```bash
-export HPCDOCKBENCH=~/nf-core-hpcdockbench
+export HPCDOCKBENCH=~/hpc_dock_bench
 export PATH=$HPCDOCKBENCH:$PATH
 ```
 

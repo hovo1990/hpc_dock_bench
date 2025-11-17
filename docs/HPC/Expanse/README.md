@@ -100,7 +100,7 @@ git clone https://github.com/hovo1990/hpc_dock_bench.git
 ```bash
 export MAINPATH=/expanse/lustre/projects/$EXPANSEPROJECT/$USERNAME/
 export SINGIMAGES=$MAINPATH/singularity_images
-export HPCDOCKBENCH=$MAINPATH/nf-core-hpcdockbench
+export HPCDOCKBENCH=$MAINPATH/hpc_dock_bench
 export PATH=$HPCDOCKBENCH:$PATH
 ```
 

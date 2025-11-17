@@ -109,7 +109,7 @@ git clone https://github.com/hovo1990/hpc_dock_bench.git
 
 
 ```bash
-export HPCDOCKBENCH=$(pwd)/nf-core-hpcdockbench
+export HPCDOCKBENCH=$(pwd)/hpc_dock_bench
 export PATH=$HPCDOCKBENCH:$PATH
 
 export NXF_SINGULARITY_CACHEDIR=$SINGIMAGES

@@ -211,11 +211,11 @@ git clone  https://github.com/hovo1990/hpc_dock_bench.git
 ```
 
 
-### 6.3 Export nf-core-hpcdockbench to environment path
+### 6.3 Export hpcdockbench to environment path
 
 
 ```bash
-export HPCDOCKBENCH=$(pwd)/nf-core-hpcdockbench
+export HPCDOCKBENCH=$(pwd)/hpc_dock_bench
 export PATH=$HPCDOCKBENCH:$PATH
 ```
 

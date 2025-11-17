@@ -303,7 +303,7 @@ workflow HPCDOCKBENCH {
 
 
     emit:
-    versions       = plots                 // channel: [ path(versions.yml) ]
+    versions       = ch_versions               // channel: [ path(versions.yml) ]
 
 }
 

@@ -179,7 +179,7 @@ def validateInputParameters() {
 // Exit pipeline if incorrect --genome key provided
 //
 def benchmarkExistsError() {
-    if (params.icm_home) {
+    if (params.icm_home == null) {
         def error_string = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "  ICM_HOME '${params.icm_home}' not found in any config files provided to the pipeline.\n" +
             "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

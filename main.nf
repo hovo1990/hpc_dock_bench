@@ -99,7 +99,7 @@ workflow {
     // def container_to_use = pickContainer(glibc)
     // println params.container_link
 
-    NFCORE_HPCDOCKBENCH (
+    ABLAB_HPCDOCKBENCH(
         // PIPELINE_INITIALISATION.out.samplesheet
     )
 

@@ -100,7 +100,7 @@ export NFX_OPTS="-Xms=512m -Xmx=4g"
 nextflow run main.nf \
    -resume \
    -profile singularity \
-   --outdir ~/hpc_dock_bench_singularity \
+   --outdir ~/hpc_dock_bench_singularity_test \
    --save_intermediate true \
    --icm_home $ICM_HOME
 

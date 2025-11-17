@@ -85,6 +85,15 @@ nextflow run main.nf \
    --hook_url $HOOK_URL
 
 
+nextflow run main.nf \
+   -resume \
+   -profile singularity \
+   --useGPU true \
+   --outdir ~/hpc_dock_bench_singularity_testGPU \
+   --icm_home $ICM_HOME \
+   --hook_url $HOOK_URL
+
+
 ```
 
 ### To Save intermediate results for Singularity/Apptainer run
@@ -114,9 +123,9 @@ export NXF_GLIBC_VERSION=$(ldd --version | head -n1 | awk '{print $NF}')
 
 nextflow run main.nf \
    -resume \
-   -profile ablab \
+   -profile slurm \
    --useGPU true \
-   --outdir ~/a/hpc_dock_bench_ablab \
+   --outdir ~/a/hpc_dock_bench_slurm_test11 \
    --icm_home $ICM_HOME \
    --save_intermediate true \
    --mount_options "/home/$USER,/mnt/nfsa/pro:/pro:rw,/mnt/nfsa/data:/data:rw,/mnt/nfsa/users:/users:rw,/mnt/nfsa/lab:/lab:rw,/home/opt/tmp:/home/opt/tmp:rw"

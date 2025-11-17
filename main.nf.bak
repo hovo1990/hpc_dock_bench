@@ -1,11 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/hpcdockbench
+    ablab/hpcdockbench
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/hpcdockbench
-    Website: https://nf-co.re/hpcdockbench
-    Slack  : https://nfcore.slack.com/channels/hpcdockbench
+    Github : https://github.com/ablab/hpcdockbench
 ----------------------------------------------------------------------------------------
 */
 
@@ -22,6 +20,17 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_hpcd
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    GENOME PARAMETER VALUES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+// TODO nf-core: Remove this line if you don't need a FASTA file
+//   This is an example of how to use getGenomeAttribute() to fetch parameters
+//   from igenomes.config using `--genome`
+params.fasta = getGenomeAttribute('fasta')
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -31,8 +40,8 @@ include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_hpcd
 //
 workflow ABLAB_HPCDOCKBENCH {
 
-    // take:
-    // samplesheet // channel: samplesheet read in from --input
+    take:
+    samplesheet // channel: samplesheet read in from --input
 
     main:
 
@@ -40,26 +49,16 @@ workflow ABLAB_HPCDOCKBENCH {
     // WORKFLOW: Run pipeline
     //
     HPCDOCKBENCH (
-        // samplesheet
+        samplesheet
     )
-    // emit:
-    // multiqc_report = HPCDOCKBENCH.out.multiqc_report // channel: /path/to/multiqc_report.html
+    emit:
+    multiqc_report = HPCDOCKBENCH.out.multiqc_report // channel: /path/to/multiqc_report.html
 }
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-def greet(name) {
-    return "Hello, ${name}!"
-}
-
-
-
-
-
 
 workflow {
 
@@ -79,31 +78,13 @@ workflow {
         params.show_hidden
     )
 
-
     //
     // WORKFLOW: Run main workflow
     //
-    // -- * Custom parameter definition
-    // Detect host glibc version from wrapper (fallback = 2.31)
-    // def glibc = System.getenv('NXF_GLIBC_VERSION') ?: '2.31'
-
-
-    // // println containerCandidates
-
-    // // -- * debug
-    // // log.info greet('Nextflow')
-
-
-    // println params.container_link
-
-    // def container_to_use = pickContainer(glibc)
-    // println params.container_link
-
-    NFCORE_HPCDOCKBENCH (
-        // PIPELINE_INITIALISATION.out.samplesheet
+    ABLAB_HPCDOCKBENCH (
+        PIPELINE_INITIALISATION.out.samplesheet
     )
-
-
+    //
     // SUBWORKFLOW: Run completion tasks
     //
     PIPELINE_COMPLETION (
@@ -113,6 +94,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
+        ABLAB_HPCDOCKBENCH.out.multiqc_report
     )
 }
 

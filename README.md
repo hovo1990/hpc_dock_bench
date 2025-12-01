@@ -121,6 +121,7 @@ export ICM_HOME=/pro/icm/icms
 export NFX_OPTS="-Xms=512m -Xmx=4g"
 export SINGULARITY_CACHEDIR="/scratch/$USER/hpc_dock_bench"
 export NXF_GLIBC_VERSION=$(ldd --version | head -n1 | awk '{print $NF}')
+export HOOK_URL="https://discord.com/api/webhooks/XXXXXX/XXXXXXXX/slack"
 
 nextflow run main.nf \
    -resume \

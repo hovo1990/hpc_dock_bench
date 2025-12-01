@@ -120,7 +120,11 @@ endif
 
 
 # -- * Start ICM pocket finder
-quit 1
+exit
+assign sstructure a_1.A
+
+
+# quit 1
 
 # -- * Now select pocket
 Dirinp = NameGene
@@ -194,11 +198,11 @@ currentDockProj.data[1] = CovDocName
 
 
 if (Error()) then
-  printf error " Error> Could not prepare for docking\n"
+  printf error " Error> Could not extract pocket features \n"
   quit 1
 endif
 
-print " Info> System for docking has been prepared\n"
+print " Info> extraction of pocket features done \n"
 quit 0
 
 

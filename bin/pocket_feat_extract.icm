@@ -144,14 +144,6 @@ print "Type of Dirinp ->"
 Type(Dirinp)
 print "------------------------------------------------"
 
-##-- * Create dir
-unix mkdir $Dirinp
-
-##-- * Set directory to the individual project
-set directory "./" + Dirinp
-
-
-
 
 
 #-- * Add fields to object
@@ -297,9 +289,19 @@ endif
 
 #-- * now need to save the files
 writeProject output_session  yes
-write table separator="," header  $table_name_to_use output_table  yes
+
+write table separator="," header  $table_name_to_use output_table
+
+if (Error()) then
+  printf error " Error> in saving files\n"
+  quit 1
+endif
+
+
 
 print " Info> extraction of pocket features done \n"
 quit 0
+
+
 
 

@@ -248,7 +248,7 @@ tSpecICM = Table(residue)
 # delete a_*.
 
 
-c = Collection( "{ 'arg': 'AA_POSITIVE_SIDECHAIN', 'asp': 'AA_NEGATIVE_SIDECHAIN', 'glu': 'AA_NEGATIVE_SIDECHAIN' }" ) # from JSON string
+c = Collection( "{ 'arg': 'AA_POSITIVE_SIDECHAIN','his': 'AA_POSITIVE_SIDECHAIN', 'lys': 'AA_POSITIVE_SIDECHAIN',  'asp': 'AA_NEGATIVE_SIDECHAIN', 'glu': 'AA_NEGATIVE_SIDECHAIN', 'ser': 'AA_POLAR_UNCHARGED',  'thr': 'AA_POLAR_UNCHARGED', 'asn': 'AA_POLAR_UNCHARGED', 'gln': 'AA_POLAR_UNCHARGED',  'cys': 'AA_SPECIAL', 'sec': 'AA_SPECIAL', 'gly': 'AA_SPECIAL',  'pro': 'AA_SPECIAL', 'ala': 'AA_HYDROPHOBIC', 'val': 'AA_HYDROPHOBIC', 'ile': 'AA_HYDROPHOBIC', 'leu': 'AA_HYDROPHOBIC', 'met': 'AA_HYDROPHOBIC', 'phe': 'AA_HYDROPHOBIC', 'tyr': 'AA_HYDROPHOBIC', 'trp': 'AA_HYDROPHOBIC',  }" ) # from JSON string
 
 
 

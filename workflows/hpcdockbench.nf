@@ -32,6 +32,7 @@ include { prepIcmProject_Regular } from '../modules/local/prep_icm_project'
 
 
 include { ligandsViz } from '../modules/local/ligands_viz'
+include { pocketFeatExtract  } from '../modules/local/pocket_feat_extract'
 
 
 include { makePlot} from '../modules/local/make_plot'
@@ -115,11 +116,11 @@ workflow HPCDOCKBENCH {
     // tasks_todo_debug = tasks_todo.take(20)
 
     tasks_todo_debug = tasks_todo
-    tasks_todo_debug.view()
+    // tasks_todo_debug.view()
 
 
     // -- * Stage 4.5 Extract Pocket Features
-
+    individual_extracted_pocket_feats = pocketFeatExtract(tasks_todo_debug)
 
 
     // // -- * Stage 5: Prepare docking projects

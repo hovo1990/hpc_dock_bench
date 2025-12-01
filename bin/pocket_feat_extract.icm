@@ -230,6 +230,25 @@ add column $table_name_to_use  s_projID name="ProjID"
 mainPock = $table_name_to_use.Type [1]
 toSelCheck=Res(Sphere($mainPock a_1.* 2.5))
 
+# -- * Residue types
+read library
+read library residue
+tSpecICM = Table(residue)
+
+
+# to get name
+# Name(toSelCheck[1])[1]
+
+# c = Collection( )
+# c["ob"] = a_           # store object
+# c["map"] = m_atoms     # store map
+# s_base64 = String( Blob( c binary ) 'base64') # serialize collection into base64 string.
+#                                               # now it can be passed between CGI scripts
+
+# delete a_*.
+
+
+c = Collection( "{ 'arg': 'AA_POSITIVE_SIDECHAIN', 'asp': 'AA_NEGATIVE_SIDECHAIN', 'glu': 'AA_NEGATIVE_SIDECHAIN' }" ) # from JSON string
 
 
 

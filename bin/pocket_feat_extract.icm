@@ -119,9 +119,8 @@ endif
 
 
 
-# -- * Start ICM pocket finder
-exit
-assign sstructure a_1.A
+
+
 
 
 # quit 1
@@ -178,24 +177,26 @@ assign sstructure a_A
 #-- ! 5 - Too big pocket
 SelecForDock = pocketSel
 
-#-- ! Prepare docking project
+#-- ! Prepare for pocket extraction
 currentDockProj.data[8] = "yes"  # ????
 tempsel = SelecForDock & a_$objName. ## old version -> tempsel = PocketSelection & a_$InputPdb. ##
 
 CovDocName = Dirinp
 # quit 1
 
-# -- * enable enhanced born
-if rborn_arg==yes then
-  dock2SetupReceptor CovDocName a_$objName. tempsel no  "enhancedBorn"
-else
-  dock2SetupReceptor CovDocName a_$objName. tempsel no no ? "enhancedBorn" : "none"
-endif
-# -- * Old version
-# dock2SetupReceptor CovDocName a_$objName. tempsel no no ? "enhancedBorn" : "none"
-if( currentDockProj.l_readyReceptor ) dock5CalcMaps CovDocName 0.5 4.0 no # оменять тут чуток  have changed
-currentDockProj.data[1] = CovDocName
 
+
+# -- * Start ICM pocket finder
+exit
+
+# -- * ICM Pocket Finder, it will generate POCKETS Table
+# -- * example 1T9B icm pocket finder, 4.6 does not find, with 3 pocket too big
+
+
+if no icmPocketFinder a_1.a & a_*.!W 4.6 no no yes
+if ! no icmPocketFinder a_1.a & a_*.!H,W 4.6 no no yes
+
+# -- * To select residues around g_pocket1, use Sphere( g_pocket1 a_/* ), etc.
 
 if (Error()) then
   printf error " Error> Could not extract pocket features \n"

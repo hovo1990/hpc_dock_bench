@@ -60,7 +60,7 @@ process pocketFeatExtract {
 
 
     output:
-        tuple val(dataset_name), val(code), val("p${code}"), file("${code}_protein.pdb"), file("${code}_ligand.sdf"), file("p${code}_2D_ligand.sdf"), path("p${code}/*")
+        tuple val(dataset_name), val(code), val("p${code}"), file("${code}_feat.icb"), file("${code}_feat.csv"),path("p${code}/*")
 
 
     script:
@@ -72,7 +72,6 @@ process pocketFeatExtract {
                 ${projectDir}/bin/dockScan_prep_dock_project.icm \
                     -i=${code}_protein.pdb \
                     -il=${code}_ligand.sdf  \
-                    -rborn=no \
                     -projID="p${code}"
         """
 

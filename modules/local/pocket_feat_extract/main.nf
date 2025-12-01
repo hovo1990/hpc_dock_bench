@@ -60,7 +60,7 @@ process pocketFeatExtract {
 
 
     output:
-        tuple val(dataset_name), val(code), val("p${code}"), file("${code}_feat.icb"), file("${code}_feat.csv"),path("p${code}/*")
+        tuple val(dataset_name), val(code), val("p${code}"), file("${code}_feat.icb"), file("${code}_feat.csv")
 
 
     script:
@@ -73,8 +73,8 @@ process pocketFeatExtract {
                     -i=${code}_protein.pdb \
                     -il=${code}_ligand.sdf  \
                     -projID="p${code}" \
-                    -out=${code}_session.icb \
-                    -ot=${code}_table.csv
+                    -out=${code}_feat.icb \
+                    -ot=${code}_feat.csv
         """
 
 

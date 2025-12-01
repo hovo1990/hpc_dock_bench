@@ -192,9 +192,8 @@ exit
 # -- * ICM Pocket Finder, it will generate POCKETS Table
 # -- * example 1T9B icm pocket finder, 4.6 does not find, with 3 pocket too big
 
-
-if no icmPocketFinder a_1.a & a_*.!W 4.6 no no yes
-if ! no icmPocketFinder a_1.a & a_*.!H,W 4.6 no no yes
+if yes icmPocketFinder Mol(a_1.//DD) & a_*.!W 4.6 no no yes
+if ! yes icmPocketFinder Mol(a_1.//DD) & a_*.!H,W 4.6 no no yes
 
 # -- * To select residues around g_pocket1, use Sphere( g_pocket1 a_/* ), etc.
 

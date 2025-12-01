@@ -195,7 +195,7 @@ exit
 if yes icmPocketFinder Mol(a_1.*) & a_*.!W 4.6 no no yes
 if ! yes icmPocketFinder Mol(a_1.*) & a_*.!H,W 4.6 no no yes
 
-
+# -- * To select residues around g_pocket1, use Sphere( g_pocket1 a_/* ), etc.
 # test
 # writeProject "test.icb"  yes
 
@@ -215,10 +215,24 @@ for i=1, Nof(POCKETS)
 
 endfor
 
+if Nof($table_name_to_use) < 1 then
+  printf error " Error> There are no pocket details at all \n"
+  quit 1
+endif
 
 
 
-# -- * To select residues around g_pocket1, use Sphere( g_pocket1 a_/* ), etc.
+# - * Now add projID as column
+add column $table_name_to_use  s_projID name="ProjID"
+
+
+# --* now we know main, pocket lets extract amino acid and ion informations, 2.5 Default of ICM
+mainPock = $table_name_to_use.Type [1]
+toSelCheck=Res(Sphere($mainPock a_1.* 2.5))
+
+
+
+
 
 if (Error()) then
   printf error " Error> Could not extract pocket features \n"

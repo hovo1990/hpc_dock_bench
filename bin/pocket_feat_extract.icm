@@ -187,7 +187,7 @@ CovDocName = Dirinp
 
 
 # -- * Start ICM pocket finder
-exit
+# exit
 
 # -- * ICM Pocket Finder, it will generate POCKETS Table
 # -- * example 1T9B icm pocket finder, 4.6 does not find, with 3 pocket too big
@@ -252,13 +252,37 @@ c = Collection( "{ 'arg': 'AA_POSITIVE_SIDECHAIN','his': 'AA_POSITIVE_SIDECHAIN'
 
 
 
-# - * Now add AA Types
+# -- * Now add AA Types
 add column $table_name_to_use  0 name="AA_POSITIVE_SIDECHAIN"
 add column $table_name_to_use  0 name="AA_NEGATIVE_SIDECHAIN"
 add column $table_name_to_use  0 name="AA_POLAR_UNCHARGED"
 add column $table_name_to_use  0 name="AA_SPECIAL"
 add column $table_name_to_use  0 name="AA_HYDROPHOBIC"
 
+
+all_metals = tSpecICM.type == 'Metal'
+
+
+
+
+for i=1,Nof(all_metals)
+  curr_name = all_metals.name[i]
+  curr_name_to_use = "Metal_" + curr_name
+  add column $table_name_to_use  0 name=curr_name_to_use
+  c[curr_name] = curr_name_to_use
+endfor
+
+
+# -- * Now Assign from selection to table
+
+for i=1,Nof(toSelCheck)
+  curr_res = Name(toSelCheck[i])[1]
+  currColumnName = c[curr_res]
+  if currColumnName != ND then
+    $table_name_to_use.$currColumnName = $table_name_to_use.$currColumnName + 1
+  endif
+  delete currColumnName
+endfor
 
 
 

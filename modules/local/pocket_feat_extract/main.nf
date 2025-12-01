@@ -72,7 +72,9 @@ process pocketFeatExtract {
                 ${projectDir}/bin/pocket_feat_extract.icm \
                     -i=${code}_protein.pdb \
                     -il=${code}_ligand.sdf  \
-                    -projID="p${code}"
+                    -projID="p${code}" \
+                    -out=${code}_session.icb \
+                    -ot=${code}_table.csv
         """
 
 

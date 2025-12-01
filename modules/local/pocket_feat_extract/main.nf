@@ -1,11 +1,11 @@
 
 
-process prepIcmProject_Regular {
+process pocketFeatExtract {
     // errorStrategy 'ignore'
     // cache false
     // def date = LocalDate.now().toString().replace("-","_")
 
-    tag "CPU-PREP-ICM-Regular-p${code}"
+    tag "CPU-ICM-PockeatFeatExtract-p${code}"
 
 
     label 'low_cpu_debug'
@@ -50,7 +50,7 @@ process prepIcmProject_Regular {
     }
 
     if (params.save_intermediate) {
-        publishDir "${params.outdir}/stage4_ICM_Projects_Regular", mode: 'copy', overwrite: true
+        publishDir "${params.outdir}/pocket_ICM_FEAT_EXTRACT/stage1_individual", mode: 'copy', overwrite: true
     }
 
 

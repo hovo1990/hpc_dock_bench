@@ -252,6 +252,15 @@ c = Collection( "{ 'arg': 'AA_POSITIVE_SIDECHAIN','his': 'AA_POSITIVE_SIDECHAIN'
 
 
 
+# - * Now add AA Types
+add column $table_name_to_use  0 name="AA_POSITIVE_SIDECHAIN"
+add column $table_name_to_use  0 name="AA_NEGATIVE_SIDECHAIN"
+add column $table_name_to_use  0 name="AA_POLAR_UNCHARGED"
+add column $table_name_to_use  0 name="AA_SPECIAL"
+add column $table_name_to_use  0 name="AA_HYDROPHOBIC"
+
+
+
 
 if (Error()) then
   printf error " Error> Could not extract pocket features \n"

@@ -197,10 +197,12 @@ if ! yes icmPocketFinder Mol(a_1.*) & a_*.!H,W 4.6 no no yes
 # -- * Find the pocket which covers the ligand
 table_name_to_use =  s_projID
 
+
+# -- * default is 2.5
 for i=1, Nof(POCKETS)
     print i
     s_out=POCKETS.Type[i]
-    toSel = Mol(Sphere($s_out a_2. 1.2))
+    toSel = Mol(Sphere($s_out a_2. 2.5))
     show toSel
     print "-------------------------------------"
     if Nof(toSel) > 0 then

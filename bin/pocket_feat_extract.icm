@@ -201,7 +201,7 @@ table_name_to_use =  s_projID
 
 # exit
 
-# -- * default is 2.5
+# -- * this is for finding ligand pocket
 for i=1, Nof(POCKETS)
     print i
     s_out=POCKETS.Type[i]

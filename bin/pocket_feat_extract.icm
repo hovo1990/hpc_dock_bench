@@ -259,13 +259,16 @@ add column $table_name_to_use  0 name="AA_HYDROPHOBIC"
 
 all_metals = tSpecICM.type == 'Metal'
 
-
+# exit
 # only one column for metals
+
+curr_name_to_use = "Metal"
+add column $table_name_to_use  0 name=curr_name_to_use
+
 
 for i=1,Nof(all_metals)
   curr_name = all_metals.name[i]
-  curr_name_to_use = "Metal_" + curr_name
-  add column $table_name_to_use  0 name=curr_name_to_use
+  curr_name_to_use = "Metal"
   c[curr_name] = curr_name_to_use
 endfor
 

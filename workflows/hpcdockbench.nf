@@ -123,6 +123,10 @@ workflow HPCDOCKBENCH {
     // -- ? Debug:   ~/a/Projects/Pipelines/ablab-hpcdockbench/work/6e/8ba503b8f8d28742cd7266afd77bd5
     individual_extracted_pocket_feats = pocketFeatExtract(tasks_todo_debug)
 
+    // -- * combine all the csv files into one csv file
+
+
+
 
     // // -- * Stage 5: Prepare docking projects
     // // -- TODO for debug purposes test out only 8F4J_PHO

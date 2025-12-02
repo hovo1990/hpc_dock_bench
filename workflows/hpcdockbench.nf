@@ -33,7 +33,7 @@ include { prepIcmProject_Regular } from '../modules/local/prep_icm_project'
 
 include { ligandsViz } from '../modules/local/ligands_viz'
 include { pocketFeatExtract  } from '../modules/local/pocket_feat_extract'
-
+include { join_tables  } from '../modules/local/join_tables'
 
 include { makePlot} from '../modules/local/make_plot'
 
@@ -126,7 +126,9 @@ workflow HPCDOCKBENCH {
 
     // -- * combine all the csv files into one csv file
     collectedList =      individual_extracted_pocket_feats.collectFile { it[4].toString() + "\n" }  // Collect as a string with newline
-    collectedList.view()
+    // collectedList.view()
+
+    joined_table = join_tables(collectedList)
 
 
     // // -- * Stage 5: Prepare docking projects

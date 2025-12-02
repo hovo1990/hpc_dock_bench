@@ -18,12 +18,12 @@ import fs
 import matplotlib as mpl
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-import mpire
+
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from loguru import logger
-from mpire import WorkerPool
+
 
 # %%
 # -- ? Import libraries
@@ -40,7 +40,9 @@ logger.info("pandas: {}".format(pd.__version__))
 
 # %%
 @click.command()
-@click.argument("inputs", nargs=-1)
+@click.option(
+    "-i", "--input", help="input in csv file format", required=True
+)
 @click.option(
     "-o", "--output", help="Output to a bsv table or any other format", required=True
 )
@@ -51,16 +53,24 @@ logger.info("pandas: {}".format(pd.__version__))
     type=int,
     help="number of cpu cores on the machine",
 )
-def join_tables(inputs, output, cpus):
-    logger.info(" Info> inputs are {}".format(inputs))
-    logger.info(" Info> output parquet is {}".format(output))
+def join_tables(input, output, cpus):
+    logger.info(" Info> input is  {}".format(input))
+    logger.info(" Info> output is {}".format(output))
     logger.info(" Info> Number of cpu cores on the machine are {}".format(cpus))
     test = 1
+
+
 
     try:
         li = []
 
-        for i in inputs:
+        inputs = pd.read_csv(input, header=None)
+        logger.info(len(inputs))
+
+        logger.info(inputs)
+
+        for i in tqdm(inputs[0]):
+            # logger.info(i)
             suffix = pathlib.Path(i).suffix
             logger.info(" Info> reading {}, suffix is {}".format(i, suffix))
             if suffix == ".bsv":

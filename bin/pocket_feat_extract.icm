@@ -187,8 +187,10 @@ CovDocName = Dirinp
 # -- * ICM Pocket Finder, it will generate POCKETS Table
 # -- * example 1T9B icm pocket finder, 4.6 does not find, with 3 pocket too big
 
-if yes icmPocketFinder Mol(a_1.*) & a_*.!W 4.6 no no yes
-if ! yes icmPocketFinder Mol(a_1.*) & a_*.!H,W 4.6 no no yes
+
+# it fails for 7P1M_4IU when useing 4.6
+if yes icmPocketFinder Mol(a_1.*) & a_*.!W 3.0 no no yes
+if ! yes icmPocketFinder Mol(a_1.*) & a_*.!H,W 3.0 no no yes
 
 # -- * To select residues around g_pocket1, use Sphere( g_pocket1 a_/* ), etc.
 # test
@@ -197,12 +199,13 @@ if ! yes icmPocketFinder Mol(a_1.*) & a_*.!H,W 4.6 no no yes
 # -- * Find the pocket which covers the ligand
 table_name_to_use =  s_projID
 
+# exit
 
 # -- * default is 2.5
 for i=1, Nof(POCKETS)
     print i
     s_out=POCKETS.Type[i]
-    toSel = Mol(Sphere($s_out a_2. 2.5))
+    toSel = Mol(Sphere($s_out a_2. 1.2))
     show toSel
     print "-------------------------------------"
     if Nof(toSel) > 0 then
@@ -211,6 +214,9 @@ for i=1, Nof(POCKETS)
 
 
 endfor
+
+
+
 
 if Nof($table_name_to_use) < 1 then
   printf error " Error> There are no pocket details at all \n"

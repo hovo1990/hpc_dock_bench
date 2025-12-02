@@ -122,10 +122,11 @@ workflow HPCDOCKBENCH {
     // -- * Stage 4.5 Extract Pocket Features
     // -- ? Debug:   ~/a/Projects/Pipelines/ablab-hpcdockbench/work/6e/8ba503b8f8d28742cd7266afd77bd5
     individual_extracted_pocket_feats = pocketFeatExtract(tasks_todo_debug)
+    // individual_extracted_pocket_feats.view()
 
     // -- * combine all the csv files into one csv file
-
-
+    collectedList =      individual_extracted_pocket_feats.collectFile { it[4].toString() + "\n" }  // Collect as a string with newline
+    collectedList.view()
 
 
     // // -- * Stage 5: Prepare docking projects
